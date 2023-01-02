@@ -1,0 +1,57 @@
+{
+  "alter": {},
+    "checks": [],
+    "columns": [
+      {
+        "check": null,
+        "default": null,
+        "name": "epk_id",
+        "nullable": true,
+        "references": null,
+        "size": null,
+        "type": "int",
+        "unique": false
+      },
+      {
+        "check": null,
+        "default": null,
+        "name": "name",
+        "nullable": true,
+        "references": null,
+        "size": null,
+        "type": "string",
+        "unique": false
+      },
+      {
+        "check": null,
+        "default": null,
+        "name": "row_update_time",
+        "nullable": true,
+        "references": null,
+        "size": null,
+        "type": "timestamp",
+        "unique": false
+      },
+      {
+        "check": null,
+        "default": null,
+        "name": "row_actual_from",
+        "nullable": true,
+        "references": null,
+        "size": null,
+        "type": "date",
+        "unique": false
+      }],
+    "if_not_exists": true,
+    "index": [],
+    "partitioned_by": [
+      {
+        "name": "row_actual_to",
+        "size": null,
+        "type": "string"
+      }],
+    "primary_key": [],
+    "schema": "test_schema",
+    "table_name": "test_table",
+    "tablespace": null
+}
