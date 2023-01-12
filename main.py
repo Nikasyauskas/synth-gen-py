@@ -6,17 +6,31 @@ import dearpygui.dearpygui as dpg
 if __name__ == '__main__':
 
     dpg.create_context()
-    dpg.create_viewport(title='Synthetic Generator', width=1200, height=1200)
-    dpg.set_global_font_scale(3)
 
-    with dpg.window(label="Example Window", tag="fullscreen"):
-        dpg.add_text("Hello, world")
-        dpg.add_button(label="Save")
-        dpg.add_input_text(label="string", default_value="Quick brown fox")
-        dpg.add_slider_float(label="float", default_value=0.273, max_value=1)
+    columns_number = 4
 
+    with dpg.window(label="Tutorial", pos=(200, 200), tag="mainwindow"):
+        with dpg.table(header_row=True,
+                       resizable=True,
+                       policy=dpg.mvTable_SizingStretchProp,
+                       borders_outerH=True,
+                       borders_innerV=True,
+                       borders_innerH=True,
+                       borders_outerV=True):
+
+            for i in range(0, columns_number):
+                dpg.add_table_column(label=f"Header {i}")
+
+            for i in range(0, 4):
+                with dpg.table_row():
+                    for j in range(0, columns_number):
+                        dpg.add_text(f"Row{i} Column{j}")
+
+
+    dpg.create_viewport(title='Synthetic Generator', width=1800, height=1100)
     dpg.setup_dearpygui()
-    dpg.set_primary_window("fullscreen", True)
+    dpg.set_global_font_scale(3)
+    dpg.set_primary_window("mainwindow", True)
     dpg.show_viewport()
     dpg.start_dearpygui()
     dpg.destroy_context()
