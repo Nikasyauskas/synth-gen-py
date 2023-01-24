@@ -12,9 +12,10 @@ def show_demo():
     dpg.destroy_context()
 
 def show_custom_table():
+
     dpg.create_context()
 
-    def show_status_update(statusmessage, color=(255, 255, 255, 255)):
+    def show_status_update(statusmessage, color=(255, 0, 255, 255)):
         """Utility function to display status messages with a color to the label "status_text".
         Args:
             statusmessage (str): the status message to display. Prefix "current status: " will always be added.
