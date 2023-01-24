@@ -1,2 +1,4 @@
 .idea
 venv
+resources/parquet_storage
+resources/.*
