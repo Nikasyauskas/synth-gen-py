@@ -184,3 +184,46 @@ def show_custom_table():
     dpg.show_viewport()
     dpg.start_dearpygui()
     dpg.destroy_context()
+
+def show_input_output():
+
+    dpg.create_context()
+
+    def show_status_update(sender, statusmessage):
+        dpg.set_value("status_text", f"status is: {statusmessage}")
+
+    with dpg.window(label="Tutorial", tag="mainwindow"):
+        dpg.add_input_text(label="input", tag="input1", callback=show_status_update)
+        dpg.add_text(tag="status_text", default_value="output is: ")
+
+    dpg.create_viewport(title='Synthetic Generator', width=1800, height=1100)
+    dpg.setup_dearpygui()
+    dpg.set_global_font_scale(3)
+    dpg.set_primary_window("mainwindow", True)
+    dpg.show_viewport()
+    dpg.start_dearpygui()
+    dpg.destroy_context()
+
+def show_main():
+
+    dpg.create_context()
+    dpg.create_viewport(title='Synthetic Generator', width=1800, height=1100)
+
+    with dpg.window(label="App window", tag="mainwindow"):
+
+        with dpg.tab_bar():
+            with dpg.tab(label="ddl"):
+                dpg.add_text("pass")
+
+            with dpg.tab(label="tables"):
+                dpg.add_text("pass")
+
+            with dpg.tab(label="metadata"):
+                dpg.add_text("pass")
+
+    dpg.setup_dearpygui()
+    dpg.set_global_font_scale(3)
+    dpg.set_primary_window("mainwindow", True)
+    dpg.show_viewport()
+    dpg.start_dearpygui()
+    dpg.destroy_context()
