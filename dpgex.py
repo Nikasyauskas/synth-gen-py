@@ -1,6 +1,55 @@
 import dearpygui.dearpygui as dpg
 import dearpygui.demo as demo
 
+
+
+
+class Gui:
+
+    def __file_dialog_ok(self, sender, app_data):
+        print('OK was clicked.')
+        print("Sender: ", sender)
+        print("App Data: ", app_data)
+
+    def __file_dialog_cancel(self, sender, app_data):
+        print('Cancel was clicked.')
+        print("Sender: ", sender)
+        print("App Data: ", app_data)
+
+
+    def run_app(self):
+        dpg.create_context()
+        dpg.create_viewport(title='Synthetic Generator', width=2400, height=1500)
+
+        with dpg.file_dialog(directory_selector=False,
+                             show=False,
+                             width=2000,
+                             height=1100,
+                             callback=self.__file_dialog_ok,
+                             cancel_callback=self.__file_dialog_cancel,
+                             tag="file_dialog_tag"):
+            dpg.add_file_extension(".sql", color=(0, 255, 0, 255))
+            dpg.add_file_extension(".hql", color=(0, 255, 0, 255))
+            dpg.add_file_extension(".txt", color=(0, 255, 0, 255))
+
+        with dpg.window(label="App window", tag="mainwindow"):
+            with dpg.tab_bar():
+                with dpg.tab(label="ddl"):
+                    dpg.add_button(label="Select DDL Script", callback=lambda: dpg.show_item("file_dialog_tag"))
+
+                with dpg.tab(label="tables"):
+                    dpg.add_text("not implemented")
+
+                with dpg.tab(label="metadata"):
+                    dpg.add_text("not implemented")
+
+        dpg.setup_dearpygui()
+        dpg.set_global_font_scale(3)
+        dpg.set_primary_window("mainwindow", True)
+        dpg.show_viewport()
+        dpg.start_dearpygui()
+        dpg.destroy_context()
+
 def show_demo():
     dpg.create_context()
     demo.show_demo()
@@ -224,6 +273,41 @@ def show_main():
     dpg.setup_dearpygui()
     dpg.set_global_font_scale(3)
     dpg.set_primary_window("mainwindow", True)
+    dpg.show_viewport()
+    dpg.start_dearpygui()
+    dpg.destroy_context()
+
+def show_select_dialog():
+    dpg.create_context()
+    dpg.set_global_font_scale(3)
+
+    def __file_dialog_ok(sender, app_data):
+        print('OK was clicked.')
+        print("Sender: ", sender)
+        print("App Data: ", app_data)
+
+    def __file_dialog_cancel(sender, app_data):
+        print('Cancel was clicked.')
+        print("Sender: ", sender)
+        print("App Data: ", app_data)
+
+    def callback_file_dialog(sender, app_data):
+        with dpg.file_dialog(directory_selector=False,
+                             show=False,
+                             width=800,
+                             height=700,
+                             callback=__file_dialog_ok,
+                             cancel_callback=__file_dialog_cancel,
+                             tag="file_dialog_tag"):
+            dpg.add_file_extension(".sql", color=(0, 255, 0, 255))
+            dpg.add_file_extension(".hql", color=(0, 255, 0, 255))
+            dpg.add_file_extension(".txt", color=(0, 255, 0, 255))
+
+    with dpg.window(label="Tutorial", width=1700, height=1100):
+        dpg.add_button(label="Select DDL Script", callback=callback_file_dialog)
+
+    dpg.create_viewport(title='Synthetic Generator', width=1800, height=1200)
+    dpg.setup_dearpygui()
     dpg.show_viewport()
     dpg.start_dearpygui()
     dpg.destroy_context()
