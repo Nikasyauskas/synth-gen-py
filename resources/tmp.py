@@ -3,7 +3,7 @@ from pyspark.sql import SparkSession
 from ddl import DDLContainer
 
 parse_results = parse_from_file('resources/hive_ddl_test.sql')
-ddlContainer = DDLContainer(parse_results[0])
+ddlContainer = DDLContainer(parse_results)
 print(ddlContainer)
 
 spark = SparkSession.builder.getOrCreate()
