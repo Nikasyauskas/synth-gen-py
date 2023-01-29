@@ -1,20 +1,23 @@
 import dearpygui.dearpygui as dpg
 import dearpygui.demo as demo
-
-
+from simple_ddl_parser import parse_from_file
+from ddl import DDLContainer
 
 
 class Gui:
 
     def __file_dialog_ok(self, sender, app_data):
-        print('OK was clicked.')
-        print("Sender: ", sender)
-        print("App Data: ", app_data)
+        try:
+            parse_results = parse_from_file(app_data['file_path_name'])
+        except FileNotFoundError:
+            print("file not found") # TODO __file_dialog_ok should closed like __file_dialog_cancel
+        # TODO !!! parse_results out of Gui class !!!
+        ddlContainer = DDLContainer(parse_results)
+
 
     def __file_dialog_cancel(self, sender, app_data):
-        print('Cancel was clicked.')
-        print("Sender: ", sender)
-        print("App Data: ", app_data)
+        # TODO function __file_dialog_cancel close application - it should just close file dialog exit code 139
+        pass
 
 
     def run_app(self):
@@ -35,7 +38,7 @@ class Gui:
         with dpg.window(label="App window", tag="mainwindow"):
             with dpg.tab_bar():
                 with dpg.tab(label="ddl"):
-                    dpg.add_button(label="Select DDL Script", callback=lambda: dpg.show_item("file_dialog_tag"))
+                    dpg.add_button(label="Select DDL Script", callback=lambda: dpg.show_item("file_dialog_tag"), tag="select dialog")
 
                 with dpg.tab(label="tables"):
                     dpg.add_text("not implemented")
