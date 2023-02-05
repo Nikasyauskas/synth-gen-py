@@ -1,5 +1,5 @@
 import dearpygui.dearpygui as dpg
-from dpgex import show_main, show_demo, Gui
+from dpgex import show_main, show_demo, Gui, show_input_output, show_custom_table
 from simple_ddl_parser import parse_from_file
 from ddl import DDLContainer
 # show_demo()

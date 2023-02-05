@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import (
     Dict,
     List,
@@ -10,8 +11,10 @@ from pyspark.sql.types import (
     DateType
 )
 
+# TODO ??? make abstract Container class and inherite TableContainer and DictContainer from it ???
 
 class TableContainer:
+
     def __init__(self, ddl_metadata: Dict):
         self.schema = ddl_metadata["schema"]
         self.table = ddl_metadata["table_name"]
@@ -54,19 +57,34 @@ class TableContainer:
                 return DateType()
             case _:
                 return "not correct"
+
+    def get_columns(self):
+        return self.columns
+
     def __repr__(self):
-        return f"""
+        return f""" table
             {self.schema}.{self.table}
             {self.columns}
             {self.types}
             {self.nullable}
             {self.table_size}"""
 
+class DictContainer:
+
+    def __init__(self, table_container_list: List[TableContainer]):
+        self.columns = None
+
+    def __common_columns(self, table_container_list: List[TableContainer]):
+        # TODO __common_columns not realised
+        pass
+
+
 
 class DDLContainer:
 
     def __init__(self, parse_results: List):
         self.table_container_list = [TableContainer(elem) for elem in parse_results]
+        self.size = len(self.table_container_list)
 
-    def __repr__(self):
-        return [elem for elem in self.table_container_list]
+    def get_container_size(self):
+        return self.size

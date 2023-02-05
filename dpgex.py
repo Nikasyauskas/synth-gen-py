@@ -10,15 +10,19 @@ class Gui:
         try:
             parse_results = parse_from_file(app_data['file_path_name'])
         except FileNotFoundError:
-            print("file not found") # TODO __file_dialog_ok should closed like __file_dialog_cancel
+            print("file not found") # TODO __file_dialog_ok should be closable like __file_dialog_cancel
         # TODO !!! parse_results out of Gui class !!!
         ddlContainer = DDLContainer(parse_results)
+        print(parse_results)
+        print(ddlContainer)
 
-
-    def __file_dialog_cancel(self, sender, app_data):
+    def __file_dialog_cancel(self):
         # TODO function __file_dialog_cancel close application - it should just close file dialog exit code 139
         pass
 
+    def __show_tables_info(self):
+        dpg.add_text(default_value="table info ...")
+        # TODO not finished function
 
     def run_app(self):
         dpg.create_context()
@@ -29,7 +33,7 @@ class Gui:
                              width=2000,
                              height=1100,
                              callback=self.__file_dialog_ok,
-                             cancel_callback=self.__file_dialog_cancel,
+                             # cancel_callback=self.__file_dialog_cancel,
                              tag="file_dialog_tag"):
             dpg.add_file_extension(".sql", color=(0, 255, 0, 255))
             dpg.add_file_extension(".hql", color=(0, 255, 0, 255))
@@ -39,6 +43,7 @@ class Gui:
             with dpg.tab_bar():
                 with dpg.tab(label="ddl"):
                     dpg.add_button(label="Select DDL Script", callback=lambda: dpg.show_item("file_dialog_tag"), tag="select dialog")
+                    self.__show_tables_info()
 
                 with dpg.tab(label="tables"):
                     dpg.add_text("not implemented")
@@ -52,6 +57,8 @@ class Gui:
         dpg.show_viewport()
         dpg.start_dearpygui()
         dpg.destroy_context()
+
+
 
 def show_demo():
     dpg.create_context()
