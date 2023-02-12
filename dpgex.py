@@ -4,7 +4,12 @@ from simple_ddl_parser import parse_from_file
 from ddl import DDLContainer
 
 
+
+
 class Gui:
+
+    def __init__(self):
+        self.ddl_container_info = ""
 
     def __file_dialog_ok(self, sender, app_data):
         try:
@@ -13,16 +18,18 @@ class Gui:
             print("file not found") # TODO __file_dialog_ok should be closable like __file_dialog_cancel
         # TODO !!! parse_results out of Gui class !!!
         ddlContainer = DDLContainer(parse_results)
-        print(parse_results)
-        print(ddlContainer)
+        # print(parse_results)
+        self.ddl_container_info = ddlContainer.show_containers()
+        print(ddlContainer.show_containers())
 
     def __file_dialog_cancel(self):
         # TODO function __file_dialog_cancel close application - it should just close file dialog exit code 139
         pass
 
     def __show_tables_info(self):
-        dpg.add_text(default_value="table info ...")
-        # TODO not finished function
+        dpg.add_text(tag="ddl_info", default_value="table info ...")
+        dpg.set_value("ddl_info", self.ddl_container_info)
+        # TODO __show_tables_info not showing resault
 
     def run_app(self):
         dpg.create_context()
