@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS test_schema0.test_table0 (
  name string,
  row_update_time timestamp,
  row_actual_from date )
-PARTITIONED BY (row_actual_to string)
+PARTITIONED BY (row_actual_to string, collection string)
 STORED AS PARQUET
 ;
 
