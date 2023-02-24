@@ -86,7 +86,7 @@ class TableContainer:
         ddl_info_repr = self.schema + "." + self.table + '\n'
         for col, type, nullable in zip(self.columns, self.types, self.nullables):
             ddl_info_repr += col + " " + str(type) + " " + str(nullable) + '\n'
-        ddl_info_repr += "--------------------------------------------------\n\n"
+        ddl_info_repr += "\n"
         return ddl_info_repr
 
 
@@ -98,7 +98,6 @@ class DictContainer:
     def __common_columns(self, table_container_list: List[TableContainer]):
         # TODO __common_columns not realised
         pass
-
 
 
 class DDLContainer:

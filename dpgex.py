@@ -18,16 +18,14 @@ class Gui:
             print("file not found") # TODO __file_dialog_ok should be closable like __file_dialog_cancel
         # TODO !!! parse_results out of Gui class !!!
         ddlContainer = DDLContainer(parse_results)
-        # print(parse_results)
         self.ddl_container_info = ddlContainer.show_containers()
-        print(ddlContainer.show_containers())
+        self.__show_tables_info()
 
     def __file_dialog_cancel(self):
         # TODO function __file_dialog_cancel close application - it should just close file dialog exit code 139
         pass
 
     def __show_tables_info(self):
-        dpg.add_text(tag="ddl_info", default_value="table info ...")
         dpg.set_value("ddl_info", self.ddl_container_info)
         # TODO __show_tables_info not showing resault
 
@@ -50,7 +48,8 @@ class Gui:
             with dpg.tab_bar():
                 with dpg.tab(label="ddl"):
                     dpg.add_button(label="Select DDL Script", callback=lambda: dpg.show_item("file_dialog_tag"), tag="select dialog")
-                    self.__show_tables_info()
+                    dpg.add_spacer(tag="space", height=10)
+                    dpg.add_text(tag="ddl_info", default_value="tables info ...")
 
                 with dpg.tab(label="tables"):
                     dpg.add_text("not implemented")

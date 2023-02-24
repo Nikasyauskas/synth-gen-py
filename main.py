@@ -8,8 +8,9 @@ from ddl import DDLContainer
 # show_main()
 
 
-# chnge check. Everything work!!!
 
 if __name__ == '__main__':
     app = Gui()
     app.run_app()
+
+    # show_input_output()
