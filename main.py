@@ -10,7 +10,7 @@ from ddl import DDLContainer
 
 
 if __name__ == '__main__':
-    app = Gui()
-    app.run_app()
+    # app = Gui()
+    # app.run_app()
 
-    # show_input_output()
+    show_custom_table()

@@ -9,25 +9,18 @@ from ddl import DDLContainer
 class Gui:
 
     def __init__(self):
-        self.ddl_container_info = ""
+        self.color_info = (223, 255, 0)
 
     def __file_dialog_ok(self, sender, app_data):
         try:
             parse_results = parse_from_file(app_data['file_path_name'])
+            ddlContainer = DDLContainer(parse_results)
+            self.__show_tables_info(ddlContainer.get_common_columns()) # get_containers
         except FileNotFoundError:
-            print("file not found") # TODO __file_dialog_ok should be closable like __file_dialog_cancel
-        # TODO !!! parse_results out of Gui class !!!
-        ddlContainer = DDLContainer(parse_results)
-        self.ddl_container_info = ddlContainer.show_containers()
-        self.__show_tables_info()
+            print("file not found")
 
-    def __file_dialog_cancel(self):
-        # TODO function __file_dialog_cancel close application - it should just close file dialog exit code 139
-        pass
-
-    def __show_tables_info(self):
-        dpg.set_value("ddl_info", self.ddl_container_info)
-        # TODO __show_tables_info not showing resault
+    def __show_tables_info(self, tables_info):
+        dpg.set_value("ddl_info", tables_info)
 
     def run_app(self):
         dpg.create_context()
@@ -49,7 +42,7 @@ class Gui:
                 with dpg.tab(label="ddl"):
                     dpg.add_button(label="Select DDL Script", callback=lambda: dpg.show_item("file_dialog_tag"), tag="select dialog")
                     dpg.add_spacer(tag="space", height=10)
-                    dpg.add_text(tag="ddl_info", default_value="tables info ...")
+                    dpg.add_text(tag="ddl_info", default_value="tables info ...", color=self.color_info)
 
                 with dpg.tab(label="tables"):
                     dpg.add_text("not implemented")

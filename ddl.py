@@ -1,4 +1,3 @@
-from abc import ABC
 from typing import (
     Dict,
     List,
@@ -10,9 +9,12 @@ from pyspark.sql.types import (
     FloatType,
     DateType
 )
+from collections import Counter
 
 # TODO ??? make abstract Container class and inherite TableContainer and DictContainer from it ???
 # TODO learn gui debugger
+
+
 
 class TableContainer:
 
@@ -21,6 +23,8 @@ class TableContainer:
         self.table = ddl_metadata["table_name"]
         self.columns = self.__extract_colums(ddl_metadata)
         self.types = self.__extract_types(ddl_metadata)
+        self.partitions_col = self.__extract_partitions_columns(ddl_metadata)
+        self.partitions_types = self.__extract_partitions_types(ddl_metadata)
         self.spark_types = self.__cast_hive_to_spark_type(self.types)
         self.nullables = self.__extract_nullable(ddl_metadata)
         self.table_size = len(self.columns)
@@ -43,6 +47,18 @@ class TableContainer:
             nullable_list.append(elem["nullable"])
         return nullable_list
 
+    def __extract_partitions_columns(self, ddl_metadata: Dict):
+        part_columns_list = []
+        for elem in ddl_metadata["partitioned_by"]:
+            part_columns_list.append(elem["name"])
+        return part_columns_list
+
+    def __extract_partitions_types(self, ddl_metadata: Dict):
+        part_types_list = []
+        for elem in ddl_metadata["partitioned_by"]:
+            part_types_list.append(elem["type"])
+        return part_types_list
+
     def __cast_hive_to_spark_type(self, data_type: List):
         # TODO function - ddl.py -> DDLContainer -> __cast_hive_to_spark_type() not cover all type
         spark_types_list = []
@@ -63,29 +79,15 @@ class TableContainer:
                     return "not correct"
         return spark_types_list
 
-
-        # data_type_lower = data_type.lower()
-        # match data_type_lower:
-        #     case "int":  # add "or integer" construction
-        #         return IntegerType()
-        #     case "string":
-        #         return StringType()
-        #     case "float":
-        #         return FloatType()
-        #     case "timestamp":
-        #         return TimestampType()
-        #     case "date":
-        #         return DateType()
-        #     case _:
-        #         return "not correct"
-
     def get_columns(self):
         return self.columns
 
     def __repr__(self):
-        ddl_info_repr = self.schema + "." + self.table + '\n'
+        ddl_info_repr = "table: " + self.schema + "." + self.table + '\n'
         for col, type, nullable in zip(self.columns, self.types, self.nullables):
-            ddl_info_repr += col + " " + str(type) + " " + str(nullable) + '\n'
+            ddl_info_repr += '\t' + col + " " + str(type) + " " + str(nullable) + '\n'
+        for col, type in zip(self.partitions_col, self.partitions_types):
+            ddl_info_repr += "partitions: " + col + " " + type + '\n'
         ddl_info_repr += "\n"
         return ddl_info_repr
 
@@ -93,24 +95,32 @@ class TableContainer:
 class DictContainer:
 
     def __init__(self, table_container_list: List[TableContainer]):
-        self.columns = None
+        self.columns = self.__common_columns(table_container_list)
 
     def __common_columns(self, table_container_list: List[TableContainer]):
-        # TODO __common_columns not realised
-        pass
+        columns_collector = []
+        for container in table_container_list:
+            for col in container.get_columns():
+                columns_collector.append(col)
+        count_columns = Counter(columns_collector)
+        common_columns = [key for key, val in count_columns.items() if val > 1]
+        return common_columns
+
+    def get_columns(self):
+        return self.columns
 
 
 class DDLContainer:
 
     def __init__(self, parse_results: List):
         self.table_container_list = [TableContainer(elem) for elem in parse_results]
-        self.size = len(self.table_container_list)
+        self.common_columns = DictContainer(self.table_container_list).get_columns()
 
-    def get_container_size(self):
-        return self.size
-
-    def show_containers(self):
+    def get_containers(self):
         container_info = ""
         for elem in self.table_container_list:
             container_info += elem.__repr__()
         return container_info
+
+    def get_common_columns(self):
+        return self.common_columns
