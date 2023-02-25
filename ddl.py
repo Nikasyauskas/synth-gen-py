@@ -109,12 +109,15 @@ class DictContainer:
     def get_columns(self):
         return self.columns
 
+    def is_common_columns(self):
+        return len(self.columns) > 0
+
 
 class DDLContainer:
 
     def __init__(self, parse_results: List):
         self.table_container_list = [TableContainer(elem) for elem in parse_results]
-        self.common_columns = DictContainer(self.table_container_list).get_columns()
+        self.dict_container = DictContainer(self.table_container_list)
 
     def get_containers(self):
         container_info = ""
@@ -123,4 +126,7 @@ class DDLContainer:
         return container_info
 
     def get_common_columns(self):
-        return self.common_columns
+        return self.dict_container.get_columns()
+
+    def is_common_columns(self):
+        return self.dict_container.is_common_columns()
