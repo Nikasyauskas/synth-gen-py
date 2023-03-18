@@ -4,58 +4,45 @@ from simple_ddl_parser import parse_from_file
 from ddl import DDLContainer
 
 
-
-
 class Gui:
 
     def __init__(self):
         self.color_info = (223, 255, 0)
+        self.parse_result = ""
 
     def __file_dialog_ok(self, sender, app_data):
         try:
-            parse_results = parse_from_file(app_data['file_path_name'])
-            ddlContainer = DDLContainer(parse_results)
-            self.__show_tables_info(ddlContainer.get_common_columns()) #   get_containers
+            self.parse_result = parse_from_file(app_data['file_path_name'])
+            ddlContainer = DDLContainer(self.parse_result)
+            self.__show_tables_info(ddlContainer.get_containers())
         except FileNotFoundError:
             print("file not found")
 
     def __show_tables_info(self, tables_info):
         dpg.set_value("ddl_info", tables_info)
 
-
-
     def run_app(self):
-        dpg.create_context()
-        dpg.create_viewport(title='Synthetic Generator', width=2400, height=1500)
 
-        with dpg.file_dialog(directory_selector=False,
-                             show=False,
-                             width=2000,
-                             height=1100,
-                             callback=self.__file_dialog_ok,
-                             # cancel_callback=self.__file_dialog_cancel,
-                             tag="file_dialog_tag"):
-            dpg.add_file_extension(".sql", color=(0, 255, 0, 255))
-            dpg.add_file_extension(".hql", color=(0, 255, 0, 255))
-            dpg.add_file_extension(".txt", color=(0, 255, 0, 255))
+        dpg.create_context()
+        dpg.create_viewport(title='Synthetic Generator', width=2400, height=1100)
 
         with dpg.window(label="App window", tag="mainwindow"):
-            with dpg.tab_bar():
-                with dpg.tab(label="ddl"):
-                    dpg.add_spacer(tag="space_0", height=10)
-                    dpg.add_button(label="Select DDL Script", callback=lambda: dpg.show_item("file_dialog_tag"), tag="select dialog")
-                    dpg.add_spacer(tag="space_1", height=10)
-                    dpg.add_text(tag="ddl_info", default_value="tables info ...", color=self.color_info)
+            with dpg.file_dialog(directory_selector=False,
+                                 show=False,
+                                 width=2000,
+                                 height=1000,
+                                 callback=self.__file_dialog_ok,
+                                 # cancel_callback=self.__file_dialog_cancel,
+                                 tag="file_dialog_tag"):
+                dpg.add_file_extension(".sql", color=(0, 255, 0, 255))
+                dpg.add_file_extension(".hql", color=(0, 255, 0, 255))
+                dpg.add_file_extension(".txt", color=(0, 255, 0, 255))
 
-                with dpg.tab(label="tables"):
-                    dpg.add_spacer(tag="space_2", height=10)
-
-
-
-
-
-                with dpg.tab(label="metadata"):
-                    dpg.add_text("not implemented")
+            dpg.add_spacer(tag="space_0", height=10)
+            dpg.add_button(label="Select DDL Script", callback=lambda: dpg.show_item("file_dialog_tag"),
+                           tag="select dialog")
+            dpg.add_spacer(tag="space_1", height=10)
+            dpg.add_text(tag="ddl_info", default_value="tables info ...", color=self.color_info)
 
         dpg.setup_dearpygui()
         dpg.set_global_font_scale(3)
@@ -63,6 +50,18 @@ class Gui:
         dpg.show_viewport()
         dpg.start_dearpygui()
         dpg.destroy_context()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
