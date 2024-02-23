@@ -2,3 +2,4 @@
 venv
 resources/parquet_storage
 resources/.*
+__pycache__
